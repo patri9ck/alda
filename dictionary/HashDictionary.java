@@ -1,7 +1,6 @@
 package dictionary;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class HashDictionary<K, V> implements Dictionary<K, V> {
 
@@ -29,13 +28,17 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     private boolean isPrime(int candidate) {
         if ((candidate & 1) != 0) {
             int limit = (int) Math.sqrt(candidate);
+
             for (int divisor = 3; divisor <= limit; divisor += 2) {
+
                 if ((candidate % divisor) == 0) {
                     return false;
                 }
             }
+
             return true;
         }
+
         return (candidate == 2);
     }
 
@@ -180,7 +183,7 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     public Iterator<Entry<K, V>> iterator() {
         return new Iterator<>() {
             private int index = 0;
-            private Node<K, V> currentNode = null;
+            private Node<K, V> currentNode;
 
             {
                 moveToNextNonEmptyBucket();
@@ -193,10 +196,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
             @Override
             public Entry<K, V> next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
                 Entry<K, V> entry = currentNode.entry;
                 currentNode = currentNode.next;
 

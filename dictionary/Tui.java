@@ -67,6 +67,8 @@ public class Tui {
                                 insert(dictionary, translations.map(translation -> translation.split("\\s")).filter(translation -> translation.length == 2));
                             }
 
+                            System.out.println(FILE_NAME + " wurde eingelesen.");
+
                             break;
                         }
 
