@@ -14,8 +14,8 @@ public class RuntimeTest {
     private static final String FILE_NAME = "dtengl.txt";
 
     public static void main(String[] args) throws IOException {
-        int n = 16000;
-        Dictionary<String, String> dictionary = new SortedArrayDictionary<>();
+        int n = 8000;
+        Dictionary<String, String> dictionary = new BinaryTreeDictionary<>();
 
         Map<String, String> translations = getTranslations(n);
 

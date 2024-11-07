@@ -182,8 +182,8 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     public Iterator<Entry<K, V>> iterator() {
         return new Iterator<>() {
-            private int index = 0;
-            private Node<K, V> currentNode;
+            int index = 0;
+            Node<K, V> currentNode;
 
             {
                 moveToNextNonEmptyBucket();
@@ -219,8 +219,8 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     }
 
     static class Node<K, V> {
-        private final Entry<K, V> entry;
-        private Node<K, V> next;
+        final Entry<K, V> entry;
+        Node<K, V> next;
 
         public Node(Entry<K, V> entry, Node<K, V> next) {
             this.entry = entry;

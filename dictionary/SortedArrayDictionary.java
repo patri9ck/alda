@@ -20,7 +20,6 @@ public class SortedArrayDictionary<K, V> implements Dictionary<K, V> {
     public SortedArrayDictionary(Comparator<? super K> cmp) {
         if (cmp == null) {
             this.cmp = (x, y) -> ((Comparable<? super K>) x).compareTo(y);
-            ;
         } else {
             this.cmp = cmp;
         }
