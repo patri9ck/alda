@@ -86,6 +86,8 @@ public class BinaryTreeDictionary<K, V> implements Dictionary<K, V> {
             p.value = value;
         }
 
+        p = balance(p);
+
         return p;
     }
 
@@ -127,6 +129,8 @@ public class BinaryTreeDictionary<K, V> implements Dictionary<K, V> {
             --size;
         }
 
+        p = balance(p);
+
         return p;
     }
 
@@ -139,6 +143,8 @@ public class BinaryTreeDictionary<K, V> implements Dictionary<K, V> {
         } else {
             p.left = getRemMinR(p.left, min);
         }
+
+        p = balance(p);
 
         return p;
     }
@@ -239,23 +245,127 @@ public class BinaryTreeDictionary<K, V> implements Dictionary<K, V> {
         }
     }
 
+    private int getHeight(Node<K,V> p) {
+        if (p == null)
+            return -1;
+        else
+            return p.height;
+    }
+
+    private int getBalance(Node<K,V> p) {
+        if (p == null)
+            return 0;
+        else
+            return getHeight(p.right) - getHeight(p.left);
+    }
+
+    private Node<K,V> balance(Node<K,V> p) {
+        if (p == null) {
+            return null;
+        }
+
+        p.height = Math.max(getHeight(p.left), getHeight(p.right)) + 1;
+
+        if (getBalance(p) == -2) {
+            if (getBalance(p.left) <= 0) {
+                p = rotateRight(p);
+            } else {
+                p = rotateLeftRight(p);
+            }
+        } else if (getBalance(p) == 2) {
+            if (getBalance(p.right) >= 0) {
+                p = rotateLeft(p);
+            } else {
+                p = rotateRightLeft(p);
+            }
+        }
+
+        return p;
+    }
+
+    private Node<K, V> rotateRight(Node<K, V> p) {
+        Node<K, V> q = p.left;
+        p.left = q.right;
+
+        if (q.right != null) {
+            q.right.parent = p;
+        }
+
+        q.right = p;
+        q.parent = p.parent;
+        p.parent = q;
+
+        if (q.parent != null) {
+            if (q.parent.left == p) {
+                q.parent.left = q;
+            } else if (q.parent.right == p) {
+                q.parent.right = q;
+            }
+        }
+
+        p.height = Math.max(getHeight(p.left), getHeight(p.right)) + 1;
+        q.height = Math.max(getHeight(q.left), getHeight(q.right)) + 1;
+
+        return q;
+    }
+
+
+    private Node<K, V> rotateLeft(Node<K, V> p) {
+        Node<K, V> q = p.right;
+        p.right = q.left;
+
+        if (q.left != null) {
+            q.left.parent = p;
+        }
+
+        q.left = p;
+        q.parent = p.parent;
+        p.parent = q;
+
+        if (q.parent != null) {
+            if (q.parent.left == p) {
+                q.parent.left = q;
+            } else if (q.parent.right == p) {
+                q.parent.right = q;
+            }
+        }
+
+        p.height = Math.max(getHeight(p.left), getHeight(p.right)) + 1;
+        q.height = Math.max(getHeight(q.left), getHeight(q.right)) + 1;
+
+        return q;
+    }
+
+
+
+    private Node<K,V> rotateLeftRight(Node<K,V> p) {
+        p.left = rotateLeft(p.left);
+
+        return rotateRight(p);
+    }
+    private Node<K,V> rotateRightLeft(Node<K,V> p) {
+        p.right = rotateRight(p.right);
+
+        return rotateLeft(p);
+    }
+
     private static class MinEntry<K, V> {
         K key;
         V value;
     }
 
     private static class Node<K, V> {
+        int height;
         K key;
         V value;
-        int height;
         Node<K, V> left;
         Node<K, V> right;
         Node<K, V> parent;
 
         Node(K k, V v) {
+            height = 0;
             key = k;
             value = v;
-            height = 0;
             left = null;
             right = null;
             parent = null;
